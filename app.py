@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify,flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify,flash, session 
 from sshtunnel import SSHTunnelForwarder
 from Models import db 
 from DBManager import DBManager 
@@ -33,23 +33,13 @@ server.start()
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_password}@{db_host}:{server.local_bind_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
-
 # pass the app to the db object 
 db.init_app(app)
-# db = SQLAlchemy(app)
-
-
-# Dummy data for demonstration
-users = [
-    {"id": 1, "name": "Alice", "interests": "Reading, Hiking, Music","age": 15},
-    {"id": 2, "name": "Bob", "interests": "Sports, Cooking, Traveling", "age": 20},
-]
-
+dbmanager = DBManager() 
 
 @app.route('/')
 def home():
-    return render_template('home.html', users=users)
+    return render_template('home.html', users = dbmanager.get_all_users() )
 
 @app.route('/users')
 def get_users():
@@ -99,9 +89,26 @@ def register():
     return render_template("register.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        print (email,password) 
+        user = dbmanager.get_user_by_email(email)
+        if user and user.password == password:
+            session['user_id'] = user.id
+            flash("Login successful!", "success")
+            return redirect(url_for("home"))
+        flash("Invalid email or password", "danger")
+    
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop('user_id', None)
+    flash("You have been logged out", "info")
+    return redirect(url_for("home"))
 
 @app.route("/delete/<int:user_id>")
 def delete_user(user_id):
@@ -109,5 +116,4 @@ def delete_user(user_id):
     return redirect(url_for("home"))
 
 if __name__ == "__main__":
-    dbmanager = DBManager() 
     app.run(debug=True)

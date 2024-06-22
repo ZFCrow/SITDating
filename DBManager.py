@@ -12,7 +12,11 @@ class DBManager:
     @staticmethod
     def get_user_by_id(user_id):
         return Users.query.get(user_id)
-
+    
+    @staticmethod
+    def get_user_by_email(email):
+        return Users.query.filter_by(email=email).first() 
+    
     @staticmethod
     def get_all_users():
         return Users.query.all()
@@ -22,6 +26,8 @@ class DBManager:
         user = Users.query.get(user_id)
         db.session.delete(user)
         db.session.commit() 
+
+
     # @staticmethod
     # def add_swipe_right(swiper_id, swipee_id):
     #     swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)

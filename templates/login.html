@@ -4,15 +4,15 @@
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded form-signin">
         <h2 class="inter-semibold">Login</h2>
-        <form>
+        <form method="POST" action="{{ url_for('login') }}">
             <div class="form-floating">
                 <input type="email" class="form-control inter-regular" id="email" placeholder="name@example.com"
-                    required>
-                <label for="email" class="inter-regular">Email address</label>
+                name="email" required >
+                <label for="email" class="inter-regular" >Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control inter-regular" id="password" placeholder="Password" required>
-                <label for="password" class="inter-regular">Password</label>
+                <input type="password" class="form-control inter-regular" id="password" placeholder="Password" name="password" required>
+                <label for="password" class="inter-regular" >Password</label>
             </div>
 
             <div class="checkbox mb-3">
