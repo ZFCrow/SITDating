@@ -58,6 +58,7 @@ dbmanager = DBManager()
 @app.route("/")
 def home():
     username = None
+    filteredUsers = [] 
     if "user_id" in session:
         user = dbmanager.get_user_by_id(session["user_id"])
         if user:
@@ -84,23 +85,25 @@ def get_users():
 
 @app.route("/profile/<int:user_id>")
 def profile(user_id):
-    user = next((user for user in users if user["id"] == user_id), None)
+    user = dbmanager.get_user_by_id(session["user_id"])
+    # user = next((user for user in users if user["id"] == user_id), None)
     return render_template("profile.html", user=user)
 
 
 @app.route("/match")
 def match():
-    #retrieve the user id from the session 
+    # retrieve the user id from the session
     # check if the session has a user id
-    if 'user_id' not in session:
+    if "user_id" not in session:
         flash("Please login to view your matches", "danger")
         return redirect(url_for("login"))
-    user_id = session['user_id'] 
-    matches = dbmanager.get_matches(user_id) 
+    user_id = session["user_id"]
+    matches = dbmanager.get_matches(user_id)
     for match in matches:
         print(match.username)
-        print (match.age) 
-    return render_template("match.html", matches = matches)
+        print(match.age)
+    return render_template("match.html", matches=matches)
+
 
 @app.route("/swipe-right", methods=["POST"])
 def swipe_right():
@@ -148,6 +151,10 @@ def register():
         )
 
         flash("Registration successful!", "success")
+        #retrive userID from the database 
+        user = dbmanager.get_user_by_email(email) 
+        print (user.id) 
+        session["user_id"] = user.id 
         return redirect(url_for("preference"))
 
     return render_template("register.html")
@@ -162,6 +169,7 @@ def login():
         user = dbmanager.get_user_by_email(email)
         if user and user.password == password:
             session["user_id"] = user.id
+         
             flash("Login successful!", "success")
             return redirect(url_for("home"))
         flash("Invalid email or password", "danger")
@@ -169,9 +177,27 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/preference")
+@app.route("/preference", methods=["GET", "POST"])
 def preference():
+    if 'user_id' not in session:
+       flash("Please login to set your preferences", "danger")
+       return redirect(url_for("login"))
+   
+    if request.method == "POST":
+        print("receive preference form")
+         # Extract data from form
+        gender = request.form.get("gender")
+        min_age = request.form.get("min_age")
+        max_age = request.form.get("max_age")
+        interests = request.form.get("interests") 
+        user_id = session['user_id']
+        print (f"User ID: {user_id}, min_age: {min_age}, max_age: {max_age}, interests: {interests}, user_id: {user_id}")
+        dbmanager.add_preference(user_id=user_id, preferred_age_min=min_age, preferred_age_max=max_age, preferred_gender=gender, interests=interests)
+        flash("Preferences saved!", "success") 
+        return redirect(url_for("home")) 
+        
     return render_template("preference.html")
+
 
 
 @app.route("/logout")
