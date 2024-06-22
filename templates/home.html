@@ -3,11 +3,11 @@
 {% block body %}
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
-        <h2>Welcome to the School Dating App</h2>
-        <p>Select a profile to view:</p>
+        <h2 class="inter-semibold">Welcome to the School Dating App</h2>
+        <p class="inter-regular">Select a profile to view:</p>
         <ul>
             {% for user in users %}
-            <li><a href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
+            <li><a class="inter-regular" href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
             {% endfor %}
         </ul>
     </div>
