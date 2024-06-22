@@ -28,7 +28,7 @@ db_user = "sitdate-sqldev"
 db_password = "sit123"
 db_name = "sit_date"
 db_port = 3306
-    
+
 # Start SSH tunnel
 server = SSHTunnelForwarder(
     (ssh_host, 22),
@@ -58,12 +58,18 @@ dbmanager = DBManager()
 @app.route("/")
 def home():
     username = None
-    filteredUsers = [] 
+    filteredUsers = []
     if "user_id" in session:
         user = dbmanager.get_user_by_id(session["user_id"])
         if user:
             username = user.username
-    users = dbmanager.get_all_users_except(session["user_id"])  # Get all users except the current user
+        users = dbmanager.get_all_users_except(
+            session["user_id"]
+        )  # Get all users except the current user
+    else:
+        # Handle case where user is not logged in
+        flash("Please login to access this page", "danger")
+        return redirect(url_for("login"))
     return render_template("home.html", users=users, username=username)
 
 
@@ -144,17 +150,16 @@ def register():
             flash("Passwords do not match!", "danger")
             return redirect(url_for("register"))
 
-
         # Save user to database
         dbmanager.add_user(
             username, password, name, age, gender, interests, course, email
         )
 
         flash("Registration successful!", "success")
-        #retrive userID from the database 
-        user = dbmanager.get_user_by_email(email) 
-        print (user.id) 
-        session["user_id"] = user.id 
+        # retrive userID from the database
+        user = dbmanager.get_user_by_email(email)
+        print(user.id)
+        session["user_id"] = user.id
         return redirect(url_for("preference"))
 
     return render_template("register.html")
@@ -169,7 +174,7 @@ def login():
         user = dbmanager.get_user_by_email(email)
         if user and user.password == password:
             session["user_id"] = user.id
-         
+
             flash("Login successful!", "success")
             return redirect(url_for("home"))
         flash("Invalid email or password", "danger")
@@ -179,25 +184,32 @@ def login():
 
 @app.route("/preference", methods=["GET", "POST"])
 def preference():
-    if 'user_id' not in session:
-       flash("Please login to set your preferences", "danger")
-       return redirect(url_for("login"))
-   
+    if "user_id" not in session:
+        flash("Please login to set your preferences", "danger")
+        return redirect(url_for("login"))
+
     if request.method == "POST":
         print("receive preference form")
-         # Extract data from form
+        # Extract data from form
         gender = request.form.get("gender")
         min_age = request.form.get("min_age")
         max_age = request.form.get("max_age")
-        interests = request.form.get("interests") 
-        user_id = session['user_id']
-        print (f"User ID: {user_id}, min_age: {min_age}, max_age: {max_age}, interests: {interests}, user_id: {user_id}")
-        dbmanager.add_preference(user_id=user_id, preferred_age_min=min_age, preferred_age_max=max_age, preferred_gender=gender, interests=interests)
-        flash("Preferences saved!", "success") 
-        return redirect(url_for("home")) 
-        
-    return render_template("preference.html")
+        interests = request.form.get("interests")
+        user_id = session["user_id"]
+        print(
+            f"User ID: {user_id}, min_age: {min_age}, max_age: {max_age}, interests: {interests}, user_id: {user_id}"
+        )
+        dbmanager.add_preference(
+            user_id=user_id,
+            preferred_age_min=min_age,
+            preferred_age_max=max_age,
+            preferred_gender=gender,
+            interests=interests,
+        )
+        flash("Preferences saved!", "success")
+        return redirect(url_for("home"))
 
+    return render_template("preference.html")
 
 
 @app.route("/logout")
