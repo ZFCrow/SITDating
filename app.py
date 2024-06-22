@@ -88,7 +88,7 @@ def match():
     user_id = session['user_id'] 
     matches = dbmanager.get_matches(user_id) 
     print (matches) 
-    return render_template("match.html")
+    return render_template("match.html", matches = matches)
 
 
 @app.route("/register", methods=["GET", "POST"])
