@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <h2>Find Matches</h2>
-    <p>Here are your matches:</p>
-    <ul>
-        {% for user in users %}
-            <li><a href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
-        {% endfor %}
-    </ul>
+{% block body %}
+<main class="flex-shrink-0">
+    <div class="bg-light p-5 rounded">
+        <h2 class="inter-semibold">Find Matches</h2>
+        <p class="inter-regular">Here are your matches:</p>
+        <ul>
+            {% for user in users %}
+            <li><a class="inter-regular" href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</main>
+
 {% endblock %}
