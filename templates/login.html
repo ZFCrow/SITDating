@@ -4,6 +4,8 @@
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded form-signin">
         <h2 class="inter-semibold">Login</h2>
+        <p class="inter-regular"> For new members, please go to the <a href="{{ url_for('register') }}">Register</a>
+            page.</p>
         <form>
             <div class="form-floating">
                 <input type="email" class="form-control inter-regular" id="email" placeholder="name@example.com"
@@ -20,7 +22,8 @@
                     <input type="checkbox" value="remember-me" class="inter-regular"> Remember me
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Sign in</button>
+            <a class="w-100 btn btn-lg btn-primary inter-regular" type="submit" href="{{ url_for('home') }}">Sign
+                in</a>
         </form>
     </div>
 </main>

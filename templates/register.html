@@ -4,6 +4,8 @@
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded form-signin">
         <h2 class="inter-semibold">Registration</h2>
+        <p class="inter-regular"> For existing members, please go to the <a href="{{ url_for('login') }}">Login</a>
+            page.</p>
         <form>
             <div class="form-group">
                 <label for="name" class="inter-regular">Name:</label>
@@ -21,7 +23,7 @@
             </div>
 
             <div class="form-group">
-                <label for="gender" class="inter-regular">Gender</label>
+                <label for="gender" class="inter-regular">Gender:</label>
                 <select class="form-select inter-regular" id="gender" required>
                     <option value="">Choose...</option>
                     <option>Female</option>
@@ -31,12 +33,12 @@
             </div>
 
             <div class="form-group">
-                <label for="birthday" class="inter-regular">Birthday:</label>
-                <input type="date" class="form-control inter-regular" id="birthday" name="birthday" required>
+                <label for="age" class="inter-regular">Age:</label>
+                <input type="text" class="form-control inter-regular" id="age" placeholder="" required>
             </div>
 
             <div class="form-group">
-                <label for="course" class="inter-regular">Course</label>
+                <label for="course" class="inter-regular">Course:</label>
                 <select class="form-select inter-regular" id="course" required>
                     <option value="">Choose...</option>
                     <option>Business, Communication and Design</option>
@@ -63,7 +65,8 @@
                 <input type="password" class="form-control inter-regular" id="confirmpassword" placeholder="" required>
             </div>
 
-            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Register</button>
+            <a class="w-100 btn btn-lg btn-primary inter-regular" type="submit"
+                href="{{ url_for('preference') }}">Register</a>
         </form>
     </div>
 </main>
