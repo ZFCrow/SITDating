@@ -16,16 +16,20 @@
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                 {% if session['user_id'] %}
-                    <li class="nav-item">
-                        <a class="nav-link inter-regular" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link inter-regular"
+                        href="{{ url_for('profile', user_id=session['user_id']) }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link inter-regular" href="{{ url_for('logout') }}">Logout</a>
+                </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link inter-regular" aria-current="page" href="{{ url_for('register') }}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link inter-regular" href="{{ url_for('login') }}">Login</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link inter-regular" aria-current="page" href="{{ url_for('register') }}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link inter-regular" href="{{ url_for('login') }}">Login</a>
+                </li>
                 {% endif %}
             </ul>
         </div>

@@ -84,23 +84,25 @@ def get_users():
 
 @app.route("/profile/<int:user_id>")
 def profile(user_id):
-    user = next((user for user in users if user["id"] == user_id), None)
+    user = dbmanager.get_user_by_id(session["user_id"])
+    # user = next((user for user in users if user["id"] == user_id), None)
     return render_template("profile.html", user=user)
 
 
 @app.route("/match")
 def match():
-    #retrieve the user id from the session 
+    # retrieve the user id from the session
     # check if the session has a user id
-    if 'user_id' not in session:
+    if "user_id" not in session:
         flash("Please login to view your matches", "danger")
         return redirect(url_for("login"))
-    user_id = session['user_id'] 
-    matches = dbmanager.get_matches(user_id) 
+    user_id = session["user_id"]
+    matches = dbmanager.get_matches(user_id)
     for match in matches:
         print(match.username)
-        print (match.age) 
-    return render_template("match.html", matches = matches)
+        print(match.age)
+    return render_template("match.html", matches=matches)
+
 
 @app.route("/swipe-right", methods=["POST"])
 def swipe_right():

@@ -210,3 +210,12 @@ body {
 #picture{
   height: 70%;
 }
+
+.input-group-addon i {
+  margin-left: -35px;
+  margin-top: 5px;
+  cursor: pointer;
+  z-index: 200;
+  position: absolute;
+  font-size: 170%;
+}
