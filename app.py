@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 # 4. swiped-right table
 # 5. swiped-left table 
 
+
 app = Flask(__name__)
 
 # SSH server details
@@ -64,11 +65,13 @@ def get_users():
 @app.route('/profile/<int:user_id>')
 def profile(user_id):
     user = next((user for user in users if user["id"] == user_id), None)
-    return render_template('profile.html', user=user)
+    return render_template("profile.html", user=user)
 
-@app.route('/match')
+
+@app.route("/match")
 def match():
-    return render_template('match.html', users=users)
+    return render_template("match.html")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
