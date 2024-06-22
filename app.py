@@ -90,6 +90,10 @@ def profile(user_id):
 @app.route("/match")
 def match():
     #retrieve the user id from the session 
+    # check if the session has a user id
+    if 'user_id' not in session:
+        flash("Please login to view your matches", "danger")
+        return redirect(url_for("login"))
     user_id = session['user_id'] 
     matches = dbmanager.get_matches(user_id) 
     for match in matches:
