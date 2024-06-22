@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Welcome to the School Dating App</h2>
-    <p>Select a profile to view:</p>
-    <ul>
+    <h2>Swipe on Users</h2>
+    <div class="list-group">
         {% for user in users %}
-            <li><a href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
+            <div class="list-group-item">
+                <h5>{{ user.name }} - {{ user.age }}</h5>
+                <p>{{ user.interests }}</p>
+           
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
