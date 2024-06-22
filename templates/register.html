@@ -2,9 +2,69 @@
 
 {% block body %}
 <main class="flex-shrink-0">
-    <div class="bg-light p-5 rounded">
-        <h2 class="inter-semibold">Register</h2>
+    <div class="bg-light p-5 rounded form-signin">
+        <h2 class="inter-semibold">Registration</h2>
+        <form>
+            <div class="form-group">
+                <label for="name" class="inter-regular">Name:</label>
+                <input type="text" class="form-control inter-regular" id="name" placeholder="" required>
+            </div>
 
+            <div class="form-group">
+                <label for="username" class="inter-regular">Username:</label>
+                <input type="text" class="form-control inter-regular" id="username" placeholder="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="inter-regular">Email:</label>
+                <input type="email" class="form-control inter-regular" id="email" placeholder="you@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="gender" class="inter-regular">Gender</label>
+                <select class="form-select inter-regular" id="gender" required>
+                    <option value="">Choose...</option>
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="birthday" class="inter-regular">Birthday:</label>
+                <input type="date" class="form-control inter-regular" id="birthday" name="birthday" required>
+            </div>
+
+            <div class="form-group">
+                <label for="course" class="inter-regular">Course</label>
+                <select class="form-select inter-regular" id="course" required>
+                    <option value="">Choose...</option>
+                    <option>Business, Communication and Design</option>
+                    <option>Engineering</option>
+                    <option>Food, Chemical and Biotechnology</option>
+                    <option>Health and Social Sciences</option>
+                    <option>Information Technology</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="interests" class="inter-regular">Interests:</label>
+                <input type="text" class="form-control inter-regular" id="interests"
+                    placeholder="Separate each interest with a comma" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="inter-regular">Password:</label>
+                <input type="password" class="form-control inter-regular" id="password" placeholder="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmpassword" class="inter-regular">Confirm Password:</label>
+                <input type="password" class="form-control inter-regular" id="confirmpassword" placeholder="" required>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Register</button>
+        </form>
     </div>
 </main>
 
