@@ -1,4 +1,4 @@
-from Models import Users, db, Matches, SwipeRight 
+from Models import Users, db, Matches, SwipeRight, Preference
 
 class DBManager:
 
@@ -54,20 +54,13 @@ class DBManager:
 
     @staticmethod
     def add_swipe_right(swiper_id, swipee_id):
-        # swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
-        # db.session.add(swipe)
-        # db.session.commit()
-        # return swipe
         reciprocal_swipe = SwipeRight.query.filter_by(swiper_id=swipee_id, swipee_id=swiper_id).first()
         if reciprocal_swipe:
             print ("reciprocal swipe found")
             #delete the reciprocal swipe 
             db.session.delete(reciprocal_swipe)
-            #add both id to matches table 
-            match = Matches(user_id_1=swiper_id, user_id_2=swipee_id) 
-            db.session.add(match)
-            db.session.commit() 
-            return match 
+            match = DBManager.add_match(swiper_id, swipee_id)
+            return match
         else:
             swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
             db.session.add(swipe)
@@ -84,24 +77,13 @@ class DBManager:
         db.session.commit()
         return match 
     
-
-    # @staticmethod
-    # def add_swipe_right(swiper_id, swipee_id):
-    #     swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
-    #     db.session.add(swipe)
-    #     db.session.commit()
-    #     return swipe
-
-    # @staticmethod
-    # def find_mutual_matches(user_id):
-    #     matches = db.session.query(SwipeRight).filter_by(swiper_id=user_id).all()
-    #     match_ids = [match.swipee_id for match in matches]
-
-    #     mutual_matches = db.session.query(User).join(
-    #         SwipeRight, User.id == SwipeRight.swiper_id
-    #     ).filter(
-    #         SwipeRight.swipee_id == user_id,
-    #         User.id.in_(match_ids)
-    #     ).all()
-
-    #     return mutual_matches
+    @staticmethod
+    def add_preference(user_id, preferred_age_min, preferred_age_max, preferred_gender, interests):
+        preference = Preference(user_id=user_id, preferred_age_min=preferred_age_min, preferred_age_max=preferred_age_max, preferred_gender=preferred_gender, interests=interests)
+        db.session.add(preference)
+        db.session.commit()
+        return preference 
+    
+    @staticmethod
+    def get_user_preferences(user_id):
+        return Preference.query.filter_by(user_id=user_id).first()

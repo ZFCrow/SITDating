@@ -35,14 +35,15 @@ class Matches(db.Model):
     user_id_2 = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Singapore')))
 
-# class Preference(db.Model):
-#     __tablename__ = 'preferences'
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#     preferred_age_min = db.Column(db.Integer)
-#     preferred_age_max = db.Column(db.Integer)
-#     preferred_gender = db.Column(db.String(10))
-#     user = db.relationship('User', backref=db.backref('preferences', lazy=True))
+class Preference(db.Model):
+    __tablename__ = 'preferences'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    preferred_age_min = db.Column(db.Integer)
+    preferred_age_max = db.Column(db.Integer)
+    preferred_gender = db.Column(db.String(10))
+    interests = db.Column(db.String(200))
+
 
 class SwipeRight(db.Model):
     __tablename__ = 'swipe_rights'
