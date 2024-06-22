@@ -11,7 +11,11 @@ from flask import (
 from sshtunnel import SSHTunnelForwarder
 from Models import db, SwipeRight, Matches
 from DBManager import DBManager
-
+from werkzeug.utils import secure_filename
+import cv2
+import pytesseract
+import re
+import os
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret"
@@ -45,14 +49,15 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 
 # pass the app to the db object
 db.init_app(app)
 dbmanager = DBManager()
 
-# with app.app_context():
-#     db.create_all() # Create tables
-
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 @app.route("/")
 def home():
@@ -156,6 +161,7 @@ def register():
         interests = request.form.get("interests")
         password = request.form.get("password")
         confirmpassword = request.form.get("confirmpassword")
+        user_card_image = request.files['user_card_image']
         print(name, username)
 
         # Check if passwords match
@@ -163,6 +169,16 @@ def register():
             flash("Passwords do not match!", "danger")
             return redirect(url_for("register"))
 
+        if user_card_image and allowed_file(user_card_image.filename):
+            user_card_image_filename = secure_filename(user_card_image.filename)
+            user_card_image_path = os.path.join(app.config['UPLOAD_FOLDER'], user_card_image_filename)
+            print (f"{user_card_image_path}") 
+            user_card_image.save(user_card_image_path)
+
+        if not detect_school_card(user_card_image_path):
+            flash("Invalid user card", "danger")
+            return redirect(url_for("register"))
+        
         # Save user to database
         dbmanager.add_user(
             username, password, name, age, gender, interests, course, email
@@ -210,13 +226,167 @@ def preference():
         interests = request.form.get("interests") 
         user_id = session['user_id']
         print (f"User ID: {user_id}, min_age: {min_age}, max_age: {max_age}, interests: {interests}, user_id: {user_id}")
+        # if max age is less than min age, flash an error message 
+        if int(max_age) < int(min_age): 
+            flash("Max age cannot be less than min age", "danger")
+            return redirect(url_for("preference")) 
         dbmanager.add_preference(user_id=user_id, preferred_age_min=min_age, preferred_age_max=max_age, preferred_gender=gender, interests=interests)
         flash("Preferences saved!", "success") 
         return redirect(url_for("home")) 
         
     return render_template("preference.html")
 
+# Normalize extracted text (remove non-alphanumeric characters and convert to lowercase)
+def normalize_text(text):
+    text = re.sub(r'\W+', '', text)  # Remove non-alphanumeric characters
+    text = text.lower()  # Convert to lowercase
+    return text
 
+# Function to validate if the extracted text indicates a valid school card
+def validate_user_card(text):
+    # Normalize text (convert to lowercase and remove extra spaces)
+    normalized_text = text.lower().strip().replace("\n", " ")
+    print (f"Normalized Text: {normalized_text}")   
+    # Define keywords and patterns
+    keywords = ["singapore institute of technology", "sit", "student"]
+
+    # Check for keywords in the normalized text
+    for keyword in keywords:
+        if keyword in normalized_text:
+            print (f"{keyword} Keyword found") 
+            return True
+        print ("Keyword not found") 
+
+    # Check for a 7-digit number using regular expression
+    seven_digit_pattern = re.compile(r'\b\d{7}\b')
+    if seven_digit_pattern.search(normalized_text):
+        print("7-digit number found")
+        return True
+    else:
+        print("No 7-digit number found")
+
+
+    return False
+
+# Main function to process an image and validate if it's a school card
+def detect_school_card(image_path):
+    # Preprocess the image
+    preprocessed_image = preprocess_image(image_path)
+
+    # Perform OCR on preprocessed image
+    extracted_text = perform_ocr(preprocessed_image)
+
+    # Validate the extracted text
+    if validate_user_card(extracted_text):
+        print("Valid school card detected.")
+        return True 
+    else:
+        print("Not a valid school card.")
+        return False
+    # Optionally, print the extracted text for debugging purposes
+    print("Extracted Text:")
+    print(extracted_text)
+
+
+
+
+
+# Function to preprocess the image
+def preprocess_image(image_path):
+    # Load image using OpenCV
+    image = cv2.imread(image_path)
+
+    # Convert image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Apply Gaussian blur to reduce noise
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    return blur
+
+# Function to perform OCR on preprocessed image
+def perform_ocr(image):
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    # Use Tesseract OCR to extract text
+    text = pytesseract.image_to_string(image)
+
+    return text
+
+# def validate_user_card(image_path):
+#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+#     # Load the original image
+#     img = cv2.imread(image_path)
+#     if img is None:
+#         print(f"Error: Unable to read image '{image_path}'")
+#         return False
+
+#     # Convert original image to grayscale
+#     gray_original = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#     gray_original = cv2.medianBlur(gray_original, 3)
+
+#     # Use Tesseract to extract text from the original image
+#     text_original = pytesseract.image_to_string(gray_original)
+
+#     # Load the rotated image (90 degrees clockwise)
+#     rotated = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+#     gray_rotated = cv2.cvtColor(rotated, cv2.COLOR_BGR2GRAY)
+#     gray_rotated = cv2.medianBlur(gray_rotated, 3)
+
+#     # Use Tesseract to extract text from the rotated image
+#     text_rotated = pytesseract.image_to_string(gray_rotated)
+
+
+
+#     normalized_text_original = normalize_text(text_original)
+#     normalized_text_rotated = normalize_text(text_rotated)
+
+#     # Validate normalized text
+#     student_id_pattern = re.compile(r'\d{7}')
+#     student_text = re.compile(r'STUDENT')
+
+#     text_valid_original = student_id_pattern.search(normalized_text_original)
+#     text_valid_rotated = student_text.search(normalized_text_rotated)
+
+#     # Print extracted and normalized text for debugging
+#     print(f"Original Extracted Text: {text_original}")
+#     print(f"Rotated Extracted Text: {text_rotated}")
+#     print(f"Normalized Original Text: {normalized_text_original}")
+#     print(f"Normalized Rotated Text: {normalized_text_rotated}")
+
+#     # Return True if either original or rotated text is valid
+#     return text_valid_original and text_valid_rotated
+#     # Detect SIT logo
+#     logo_valid = detect_sit_logo(img)
+
+#     return text_valid and logo_valid
+
+def detect_sit_logo(img):
+    # Load the SIT logo template
+    logo_template = cv2.imread('static/images/schoolLogo.jpg', 0)
+    
+    # Check if the template is larger than the source image
+    img_height, img_width = img.shape[:2]
+    template_height, template_width = logo_template.shape[:2]
+
+    # Resize the template if necessary
+    if template_height > img_height or template_width > img_width:
+        print ("Resizing template") 
+        scale_ratio = min(img_height / template_height, img_width / template_width)
+        new_dimensions = (int(template_width * scale_ratio), int(template_height * scale_ratio))
+        logo_template = cv2.resize(logo_template, new_dimensions)
+
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    result = cv2.matchTemplate(gray_img, logo_template, cv2.TM_CCOEFF_NORMED)
+
+    threshold = 0.8
+    loc = cv2.minMaxLoc(result)
+    if loc[1] >= threshold:
+        print ("SIT logo detected") 
+        return True
+    print (loc[1]) 
+    print ("SIT logo not detected") 
+    return False
 
 @app.route("/logout")
 def logout():

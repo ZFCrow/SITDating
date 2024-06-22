@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import pytz
+
 # i will have 5 tables
 # 1. users
 # 2. interests

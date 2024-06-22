@@ -6,7 +6,7 @@
         <h2 class="inter-semibold">Registration</h2>
         <p class="inter-regular"> For existing members, please go to the <a href="{{ url_for('login') }}">Login</a>
             page.</p>
-        <form method="POST" action="{{ url_for('register') }}">
+        <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="name" class="inter-regular">Name:</label>
                 <input type="text" class="form-control inter-regular" id="name" name="name" placeholder="" required>
@@ -68,6 +68,9 @@
                 <input type="password" class="form-control inter-regular" id="confirmpassword" name="confirmpassword"
                     placeholder="" required>
             </div>
+
+            <label for="user_card_image">User Card Image:</label>
+            <input type="file" name="user_card_image" id="user_card_image" required><br>
 
             <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Register</button>
         </form>
