@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <h2>Welcome to the School Dating App</h2>
-    <p>Select a profile to view:</p>
-    <ul>
-        {% for user in users %}
+{% block body %}
+<main class="flex-shrink-0">
+    <div class="bg-light p-5 rounded">
+        <h2>Welcome to the School Dating App</h2>
+        <p>Select a profile to view:</p>
+        <ul>
+            {% for user in users %}
             <li><a href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>
+    </div>
+</main>
+
+
 {% endblock %}
