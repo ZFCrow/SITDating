@@ -9,6 +9,7 @@
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
         <h2 class="inter-semibold">Welcome to the School Dating App</h2>
+        {% if session['user_id'] %}
         <p class="inter-regular">Swipe right to match, swipe left to go to next one:</p>
         <div class="tinder">
             <div class="tinder--cards">
@@ -53,6 +54,10 @@
             <li><a class="inter-regular" href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
             {% endfor %}
         </ul>
+        {% else %}
+        <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
+                href="{{ url_for('register') }}">register</a> to view profiles.</p>
+        {% endif %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>

@@ -19,7 +19,8 @@ class Users(db.Model):
     gender = db.Column(db.String(10))
     interests = db.Column(db.String(200))
     course = db.Column(db.String(100)) 
-
+    email = db.Column(db.String(100))
+    
 # class Preference(db.Model):
 #     __tablename__ = 'preferences'
 #     id = db.Column(db.Integer, primary_key=True)

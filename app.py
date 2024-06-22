@@ -1,10 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify,
+    flash,
+    session,
+)
 from sshtunnel import SSHTunnelForwarder
 from Models import db
 from DBManager import DBManager
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "secret"
 
 # SSH server details
 ssh_host = "35.212.133.154"
@@ -27,6 +37,7 @@ server = SSHTunnelForwarder(
 )
 server.start()
 
+
 # Configure SQLAlchemy to use the tunnel
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{server.local_bind_port}/{db_name}"
@@ -36,30 +47,12 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # pass the app to the db object
 db.init_app(app)
-# db = SQLAlchemy(app)
-
-
-# Dummy data for demonstration
-users = [
-    {"id": 1, "name": "Alice", "interests": "Reading, Hiking, Music", "age": 15},
-    {"id": 2, "name": "Bob", "interests": "Sports, Cooking, Traveling", "age": 20},
-]
-
-# class Users(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(50), unique=True, nullable=False)
-#     password = db.Column(db.String(200), nullable=False)  # Assuming a password column exists
-#     age = db.Column(db.Integer) # Assuming an age column exists
+dbmanager = DBManager()
 
 
 @app.route("/")
-def first():
-    return render_template("login.html")
-
-
-@app.route("/home")
 def home():
-    return render_template("home.html", users=users)
+    return render_template("home.html", users=dbmanager.get_all_users())
 
 
 @app.route("/users")
@@ -89,13 +82,51 @@ def match():
     return render_template("match.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == "POST":
+        print("inside post")
+        # Extract data from form
+        name = request.form.get("name")
+        username = request.form.get("username")
+        email = request.form.get("email")
+        gender = request.form.get("gender")
+        age = request.form.get("age")
+        course = request.form.get("course")
+        interests = request.form.get("interests")
+        password = request.form.get("password")
+        confirmpassword = request.form.get("confirmpassword")
+        print(name, username)
+
+        # Check if passwords match
+        if password != confirmpassword:
+            flash("Passwords do not match!", "danger")
+            return redirect(url_for("register"))
+
+        # Save user to database
+        dbmanager.add_user(
+            username, password, name, age, gender, interests, course, email
+        )
+
+        flash("Registration successful!", "success")
+        return redirect(url_for("preference"))
+
     return render_template("register.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        print(email, password)
+        user = dbmanager.get_user_by_email(email)
+        if user and user.password == password:
+            session["user_id"] = user.id
+            flash("Login successful!", "success")
+            return redirect(url_for("home"))
+        flash("Invalid email or password", "danger")
+
     return render_template("login.html")
 
 
@@ -104,6 +135,18 @@ def preference():
     return render_template("preference.html")
 
 
+@app.route("/logout")
+def logout():
+    session.pop("user_id", None)
+    flash("You have been logged out", "info")
+    return redirect(url_for("home"))
+
+
+@app.route("/delete/<int:user_id>")
+def delete_user(user_id):
+    dbmanager.delete_user(user_id)
+    return redirect(url_for("home"))
+
+
 if __name__ == "__main__":
-    dbmanager = DBManager()
     app.run(debug=True)

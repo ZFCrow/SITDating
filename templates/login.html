@@ -6,14 +6,15 @@
         <h2 class="inter-semibold">Login</h2>
         <p class="inter-regular"> For new members, please go to the <a href="{{ url_for('register') }}">Register</a>
             page.</p>
-        <form>
+        <form method="POST" action="{{ url_for('login') }}">
             <div class="form-floating">
                 <input type="email" class="form-control inter-regular" id="email" placeholder="name@example.com"
-                    required>
+                    name="email" required>
                 <label for="email" class="inter-regular">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control inter-regular" id="password" placeholder="Password" required>
+                <input type="password" class="form-control inter-regular" id="password" placeholder="Password"
+                    name="password" required>
                 <label for="password" class="inter-regular">Password</label>
             </div>
 
@@ -22,8 +23,8 @@
                     <input type="checkbox" value="remember-me" class="inter-regular"> Remember me
                 </label>
             </div>
-            <a class="w-100 btn btn-lg btn-primary inter-regular" type="submit" href="{{ url_for('home') }}">Sign
-                in</a>
+            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Sign
+                in</button>
         </form>
     </div>
 </main>
