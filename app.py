@@ -52,7 +52,12 @@ dbmanager = DBManager()
 
 @app.route("/")
 def home():
-    return render_template("home.html", users=dbmanager.get_all_users())
+    username = None
+    if 'user_id' in session:
+        user = dbmanager.get_user_by_id(session['user_id'])
+        if user:
+            username = user.username
+    return render_template('home.html', users=dbmanager.get_all_users(), username=username)
 
 
 @app.route("/users")
@@ -79,7 +84,11 @@ def profile(user_id):
 
 @app.route("/match")
 def match():
-    return render_template("match.html")
+    #retrieve the user id from the session 
+    user_id = session['user_id'] 
+    matches = dbmanager.get_matches(user_id) 
+    print (matches) 
+    return render_template("match.html", matches = matches)
 
 
 @app.route("/register", methods=["GET", "POST"])
