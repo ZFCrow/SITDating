@@ -28,7 +28,7 @@ db_user = "sitdate-sqldev"
 db_password = "sit123"
 db_name = "sit_date"
 db_port = 3306
-
+    
 # Start SSH tunnel
 server = SSHTunnelForwarder(
     (ssh_host, 22),
@@ -55,15 +55,15 @@ dbmanager = DBManager()
 
 
 @app.route("/")
+@app.route("/")
 def home():
     username = None
     if "user_id" in session:
         user = dbmanager.get_user_by_id(session["user_id"])
         if user:
             username = user.username
-    return render_template(
-        "home.html", users=dbmanager.get_all_users(), username=username
-    )
+    users = dbmanager.get_all_users_except(session["user_id"])  # Get all users except the current user
+    return render_template("home.html", users=users, username=username)
 
 
 @app.route("/users")
@@ -140,6 +140,7 @@ def register():
         if password != confirmpassword:
             flash("Passwords do not match!", "danger")
             return redirect(url_for("register"))
+
 
         # Save user to database
         dbmanager.add_user(
