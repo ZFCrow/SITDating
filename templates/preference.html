@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body %}
+<main class="flex-shrink-0">
+    <div class="bg-light p-5 rounded form-signin">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="inter-semibold">Preference</h2>
+            <a href="{{ url_for('login') }}" class="btn btn-link">Skip</a>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="gender" class="inter-regular">Gender:</label>
+                <select class="form-select inter-regular" id="gender" required>
+                    <option value="">Choose...</option>
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="age" class="inter-regular">Age:</label>
+                <input type="text" class="form-control inter-regular" id="age" placeholder="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="interests" class="inter-regular">Interests:</label>
+                <input type="text" class="form-control inter-regular" id="interests"
+                    placeholder="Separate each interest with a comma" required>
+            </div>
+
+            <a class="w-100 btn btn-lg btn-primary inter-regular" type="submit" href="{{ url_for('login') }}">Save
+                preferences</a>
+        </form>
+    </div>
+</main>
+
+
+{% endblock %}

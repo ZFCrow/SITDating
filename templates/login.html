@@ -4,15 +4,18 @@
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded form-signin">
         <h2 class="inter-semibold">Login</h2>
+        <p class="inter-regular"> For new members, please go to the <a href="{{ url_for('register') }}">Register</a>
+            page.</p>
         <form method="POST" action="{{ url_for('login') }}">
             <div class="form-floating">
                 <input type="email" class="form-control inter-regular" id="email" placeholder="name@example.com"
-                name="email" required >
-                <label for="email" class="inter-regular" >Email address</label>
+                    name="email" required>
+                <label for="email" class="inter-regular">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control inter-regular" id="password" placeholder="Password" name="password" required>
-                <label for="password" class="inter-regular" >Password</label>
+                <input type="password" class="form-control inter-regular" id="password" placeholder="Password"
+                    name="password" required>
+                <label for="password" class="inter-regular">Password</label>
             </div>
 
             <div class="checkbox mb-3">
@@ -20,7 +23,8 @@
                     <input type="checkbox" value="remember-me" class="inter-regular"> Remember me
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Sign in</button>
+            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Sign
+                in</button>
         </form>
     </div>
 </main>

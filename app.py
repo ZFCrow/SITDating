@@ -1,22 +1,31 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify,flash, session 
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify,
+    flash,
+    session,
+)
 from sshtunnel import SSHTunnelForwarder
-from Models import db 
-from DBManager import DBManager 
+from Models import db
+from DBManager import DBManager
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret'
+app.config["SECRET_KEY"] = "secret"
 
 # SSH server details
-ssh_host = '35.212.133.154'
-ssh_username = 'sitdate-dev'
-ssh_password = 'sitokc'  # SSH password
+ssh_host = "35.212.133.154"
+ssh_username = "sitdate-dev"
+ssh_password = "sitokc"  # SSH password
 
 # MySQL server details
-db_host = 'localhost'
-db_user = 'sitdate-sqldev'
-db_password = 'sit123'
-db_name = 'sit_date'
+db_host = "localhost"
+db_user = "sitdate-sqldev"
+db_password = "sit123"
+db_name = "sit_date"
 db_port = 3306
 
 # Start SSH tunnel
@@ -24,20 +33,24 @@ server = SSHTunnelForwarder(
     (ssh_host, 22),
     ssh_username=ssh_username,
     ssh_password=ssh_password,
-    remote_bind_address=(db_host, db_port)
+    remote_bind_address=(db_host, db_port),
 )
 server.start()
 
 
 # Configure SQLAlchemy to use the tunnel
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_password}@{db_host}:{server.local_bind_port}/{db_name}'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{server.local_bind_port}/{db_name}"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# pass the app to the db object 
+
+# pass the app to the db object
 db.init_app(app)
-dbmanager = DBManager() 
+dbmanager = DBManager()
 
-@app.route('/')
+
+@app.route("/")
 def home():
     username = None
     if 'user_id' in session:
@@ -47,14 +60,23 @@ def home():
     return render_template('home.html', users=dbmanager.get_all_users(), username=username)
 
 
-@app.route('/users')
+@app.route("/users")
 def get_users():
     users = dbmanager.get_all_users()
-    user_list = [{'id': user.id, 'username': user.username,'age':user.age, 'gender':user.gender }for user in users]
-    print (user_list) 
+    user_list = [
+        {
+            "id": user.id,
+            "username": user.username,
+            "age": user.age,
+            "gender": user.gender,
+        }
+        for user in users
+    ]
+    print(user_list)
     return jsonify(user_list)
 
-@app.route('/profile/<int:user_id>')
+
+@app.route("/profile/<int:user_id>")
 def profile(user_id):
     user = next((user for user in users if user["id"] == user_id), None)
     return render_template("profile.html", user=user)
@@ -72,7 +94,7 @@ def match():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        print ("inside post") 
+        print("inside post")
         # Extract data from form
         name = request.form.get("name")
         username = request.form.get("username")
@@ -83,7 +105,7 @@ def register():
         interests = request.form.get("interests")
         password = request.form.get("password")
         confirmpassword = request.form.get("confirmpassword")
-        print (name,username)
+        print(name, username)
 
         # Check if passwords match
         if password != confirmpassword:
@@ -91,11 +113,13 @@ def register():
             return redirect(url_for("register"))
 
         # Save user to database
-        dbmanager.add_user(username, password,name, age,gender,interests,course,email)
-        
+        dbmanager.add_user(
+            username, password, name, age, gender, interests, course, email
+        )
+
         flash("Registration successful!", "success")
-        return redirect(url_for("home"))
-    
+        return redirect(url_for("preference"))
+
     return render_template("register.html")
 
 
@@ -104,26 +128,34 @@ def login():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        print (email,password) 
+        print(email, password)
         user = dbmanager.get_user_by_email(email)
         if user and user.password == password:
-            session['user_id'] = user.id
+            session["user_id"] = user.id
             flash("Login successful!", "success")
             return redirect(url_for("home"))
         flash("Invalid email or password", "danger")
-    
+
     return render_template("login.html")
+
+
+@app.route("/preference")
+def preference():
+    return render_template("preference.html")
+
 
 @app.route("/logout")
 def logout():
-    session.pop('user_id', None)
+    session.pop("user_id", None)
     flash("You have been logged out", "info")
     return redirect(url_for("home"))
+
 
 @app.route("/delete/<int:user_id>")
 def delete_user(user_id):
     dbmanager.delete_user(user_id)
     return redirect(url_for("home"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -4,6 +4,8 @@
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded form-signin">
         <h2 class="inter-semibold">Registration</h2>
+        <p class="inter-regular"> For existing members, please go to the <a href="{{ url_for('login') }}">Login</a>
+            page.</p>
         <form method="POST" action="{{ url_for('register') }}">
             <div class="form-group">
                 <label for="name" class="inter-regular">Name:</label>
@@ -12,16 +14,18 @@
 
             <div class="form-group">
                 <label for="username" class="inter-regular">Username:</label>
-                <input type="text" class="form-control inter-regular" id="username" name="username" placeholder="" required>
+                <input type="text" class="form-control inter-regular" id="username" name="username" placeholder=""
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="email" class="inter-regular">Email:</label>
-                <input type="email" class="form-control inter-regular" id="email" name="email" placeholder="you@example.com">
+                <input type="email" class="form-control inter-regular" id="email" name="email"
+                    placeholder="you@example.com">
             </div>
 
             <div class="form-group">
-                <label for="gender" class="inter-regular">Gender</label>
+                <label for="gender" class="inter-regular">Gender:</label>
                 <select class="form-select inter-regular" id="gender" name="gender" required>
                     <option value="">Choose...</option>
                     <option>Female</option>
@@ -36,8 +40,8 @@
             </div>
 
             <div class="form-group">
-                <label for="course" class="inter-regular">Course</label>
-                <select class="form-select inter-regular" id="course" name="course"  required>
+                <label for="course" class="inter-regular">Course:</label>
+                <select class="form-select inter-regular" id="course" name="course" required>
                     <option value="">Choose...</option>
                     <option>Business, Communication and Design</option>
                     <option>Engineering</option>
@@ -55,12 +59,14 @@
 
             <div class="form-group">
                 <label for="password" class="inter-regular">Password:</label>
-                <input type="password" class="form-control inter-regular" id="password" name="password" placeholder="" required>
+                <input type="password" class="form-control inter-regular" id="password" name="password" placeholder=""
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="confirmpassword" class="inter-regular">Confirm Password:</label>
-                <input type="password" class="form-control inter-regular" id="confirmpassword" name="confirmpassword" placeholder="" required>
+                <input type="password" class="form-control inter-regular" id="confirmpassword" name="confirmpassword"
+                    placeholder="" required>
             </div>
 
             <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Register</button>
