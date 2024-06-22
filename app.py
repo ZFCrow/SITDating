@@ -16,22 +16,23 @@ import cv2
 import pytesseract
 import re
 import os
+import constants
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret"
 
 
 # SSH server details
-ssh_host = "35.212.133.154"
-ssh_username = "sitdate-dev"
-ssh_password = "sitokc"  # SSH password
+ssh_host = constants.ssh_host 
+ssh_username = constants.ssh_username
+ssh_password = constants.ssh_password
 
 # MySQL server details
-db_host = "localhost"
-db_user = "sitdate-sqldev"
-db_password = "sit123"
-db_name = "sit_date"
-db_port = 3306
+db_host = constants.db_host
+db_user = constants.db_user
+db_password = constants.db_password
+db_name = constants.db_name
+db_port = constants.db_port
 
 # Start SSH tunnel
 server = SSHTunnelForwarder(
@@ -299,54 +300,7 @@ def perform_ocr(image):
 
     return text
 
-# def validate_user_card(image_path):
-#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-#     # Load the original image
-#     img = cv2.imread(image_path)
-#     if img is None:
-#         print(f"Error: Unable to read image '{image_path}'")
-#         return False
-
-#     # Convert original image to grayscale
-#     gray_original = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-#     gray_original = cv2.medianBlur(gray_original, 3)
-
-#     # Use Tesseract to extract text from the original image
-#     text_original = pytesseract.image_to_string(gray_original)
-
-#     # Load the rotated image (90 degrees clockwise)
-#     rotated = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-#     gray_rotated = cv2.cvtColor(rotated, cv2.COLOR_BGR2GRAY)
-#     gray_rotated = cv2.medianBlur(gray_rotated, 3)
-
-#     # Use Tesseract to extract text from the rotated image
-#     text_rotated = pytesseract.image_to_string(gray_rotated)
-
-
-
-#     normalized_text_original = normalize_text(text_original)
-#     normalized_text_rotated = normalize_text(text_rotated)
-
-#     # Validate normalized text
-#     student_id_pattern = re.compile(r'\d{7}')
-#     student_text = re.compile(r'STUDENT')
-
-#     text_valid_original = student_id_pattern.search(normalized_text_original)
-#     text_valid_rotated = student_text.search(normalized_text_rotated)
-
-#     # Print extracted and normalized text for debugging
-#     print(f"Original Extracted Text: {text_original}")
-#     print(f"Rotated Extracted Text: {text_rotated}")
-#     print(f"Normalized Original Text: {normalized_text_original}")
-#     print(f"Normalized Rotated Text: {normalized_text_rotated}")
-
-#     # Return True if either original or rotated text is valid
-#     return text_valid_original and text_valid_rotated
-#     # Detect SIT logo
-#     logo_valid = detect_sit_logo(img)
-
-#     return text_valid and logo_valid
 
 def detect_sit_logo(img):
     # Load the SIT logo template
