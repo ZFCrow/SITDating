@@ -135,7 +135,7 @@ body {
   display: inline-block;
   width: 90vw;
   max-width: 400px;
-  height: 70vh;
+  height: 80vh;
   background: #FFFFFF;
   padding-bottom: 40px;
   border-radius: 8px;
@@ -160,8 +160,8 @@ body {
   pointer-events: none;
 }
 
-.tinder--card h3 {
-  margin-top: 32px;
+.tinder--card h4 {
+  margin-top: 24px;
   font-size: 32px;
   padding: 0 16px;
   pointer-events: none;
@@ -169,6 +169,7 @@ body {
 
 .tinder--card p {
   margin-top: 24px;
+  margin-bottom: 32px;
   font-size: 20px;
   padding: 0 16px;
   pointer-events: none;
@@ -185,7 +186,7 @@ body {
   line-height: 60px;
   width: 60px;
   border: 0;
-  background: #FFFFFF;
+  background: #000000;
   display: inline-block;
   margin: 0 8px;
 }

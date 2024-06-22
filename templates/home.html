@@ -8,35 +8,35 @@
 
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
-        <h2 class="inter-semibold">Welcome to the School Dating App</h2>
         {% if session['user_id'] %}
-        <p class="inter-regular">Swipe right to match, swipe left to go to next one:</p>
+        <h2 class="inter-semibold">Start swiping!</h2>
+        <p class="inter-regular">Swipe right to match, Swipe left to go to next one</p>
         <div class="tinder">
             <div class="tinder--cards">
                 <div class="tinder--card">
                     <img src="https://via.placeholder.com/400x300">
-                    <h3>Demo card 1</h3>
-                    <p>This is a demo for Tinder like swipe cards</p>
+                    <h4 class="inter-medium">Name</h4>
+                    <p class="inter-regular">Description</p>
                 </div>
                 <div class="tinder--card">
                     <img src="https://via.placeholder.com/400x300">
-                    <h3>Demo card 2</h3>
-                    <p>This is a demo for Tinder like swipe cards</p>
+                    <h4 class="inter-medium">Name</h4>
+                    <p class="inter-regular">Description</p>
                 </div>
                 <div class="tinder--card">
                     <img src="https://via.placeholder.com/400x300">
-                    <h3>Demo card 3</h3>
-                    <p>This is a demo for Tinder like swipe cards</p>
+                    <h4 class="inter-medium">Name</h4>
+                    <p class="inter-regular">Description</p>
                 </div>
                 <div class="tinder--card">
                     <img src="https://via.placeholder.com/400x300">
-                    <h3>Demo card 4</h3>
-                    <p>This is a demo for Tinder like swipe cards</p>
+                    <h4 class="inter-medium">Name</h4>
+                    <p class="inter-regular">Description</p>
                 </div>
                 <div class="tinder--card">
                     <img src="https://via.placeholder.com/400x300">
-                    <h3>Demo card 5</h3>
-                    <p>This is a demo for Tinder like swipe cards</p>
+                    <h4 class="inter-medium">Name</h4>
+                    <p class="inter-regular">Description</p>
                 </div>
             </div>
 
@@ -55,6 +55,7 @@
             {% endfor %}
         </ul>
         {% else %}
+        <h2 class="inter-semibold">Welcome to the School Dating App</h2>
         <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
                 href="{{ url_for('register') }}">register</a> to view profiles.</p>
         {% endif %}

@@ -7,13 +7,66 @@
 {% endblock %}
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
+        {% if session['user_id'] %}
         <h2 class="inter-semibold">Find Matches</h2>
         <p class="inter-regular">Here are your matches:</p>
+        <div class="album py-5 bg-light">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="https://via.placeholder.com/400x300">
+
+                        <div class="card-body">
+                            <h5 class="inter-medium">Name</h5>
+                            <p class="card-text inter-regular">Description</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="https://via.placeholder.com/400x300">
+
+                        <div class="card-body">
+                            <h5 class="inter-medium">Name</h5>
+                            <p class="card-text inter-regular">Description</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="https://via.placeholder.com/400x300">
+
+                        <div class="card-body">
+                            <h5 class="inter-medium">Name</h5>
+                            <p class="card-text inter-regular">Description</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="https://via.placeholder.com/400x300">
+
+                        <div class="card-body">
+                            <h5 class="inter-medium">Name</h5>
+                            <p class="card-text inter-regular">Description</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <ul>
             {% for user in users %}
             <li><a class="inter-regular" href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
             {% endfor %}
         </ul>
+        {% else %}
+        <h2 class="inter-semibold">Welcome to the School Dating App</h2>
+        <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
+                href="{{ url_for('register') }}">register</a> to view profiles.</p>
+        {% endif %}
     </div>
 </main>
 
