@@ -20,6 +20,11 @@ class DBManager:
     @staticmethod
     def get_all_users():
         return Users.query.all()
+    
+    @staticmethod
+    def get_all_users_except(user_id_to_exclude):
+        return Users.query.filter(Users.id != user_id_to_exclude).all()
+
 
     @staticmethod
     def delete_user(user_id):
