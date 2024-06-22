@@ -3,8 +3,8 @@ from Models import Users, db
 class DBManager:
 
     @staticmethod
-    def add_user(username, password, name, age, gender, interests):
-        user = User(username=username, password=password, name=name, age=age, gender=gender, interests=interests)
+    def add_user(username, password, name, age, gender, interests, course, email):
+        user = Users(username=username, password=password, name=name, age=age, gender=gender, interests=interests, course=course, email=email)
         db.session.add(user)
         db.session.commit()
         return user
@@ -17,6 +17,11 @@ class DBManager:
     def get_all_users():
         return Users.query.all()
 
+    @staticmethod
+    def delete_user(user_id):
+        user = Users.query.get(user_id)
+        db.session.delete(user)
+        db.session.commit() 
     # @staticmethod
     # def add_swipe_right(swiper_id, swipee_id):
     #     swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
