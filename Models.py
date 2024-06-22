@@ -20,7 +20,16 @@ class Users(db.Model):
     interests = db.Column(db.String(200))
     course = db.Column(db.String(100)) 
     email = db.Column(db.String(100))
-    
+    matches_as_user1 = db.relationship('Matches', foreign_keys='Matches.user_id_1', backref='user1', lazy=True)
+    matches_as_user2 = db.relationship('Matches', foreign_keys='Matches.user_id_2', backref='user2', lazy=True)
+
+class Matches(db.Model):
+    __tablename__ = 'matches'
+    idmatches = db.Column(db.Integer, primary_key=True)
+    user_id_1 = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id_2 = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    #timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+
 # class Preference(db.Model):
 #     __tablename__ = 'preferences'
 #     id = db.Column(db.Integer, primary_key=True)

@@ -1,4 +1,4 @@
-from Models import Users, db
+from Models import Users, db, Matches 
 
 class DBManager:
 
@@ -27,6 +27,26 @@ class DBManager:
         db.session.delete(user)
         db.session.commit() 
 
+    @staticmethod
+    def get_matches(user_id):
+        # Query for matches where the user is either user1 or user2 directly
+        matches_as_user1 = Matches.query.filter_by(user_id_1=user_id).all()
+        matches_as_user2 = Matches.query.filter_by(user_id_2=user_id).all()
+        
+        print("User ID:", user_id)
+        print("Matches as user1:", matches_as_user1)
+        print("Matches as user2:", matches_as_user2)
+        print("------------------------------------------------")
+        # Combine the matches and extract matched users
+        matched_users = []
+        for match in matches_as_user1:
+            matched_users.append(Users.query.get(match.user_id_2))
+        for match in matches_as_user2:
+            matched_users.append(Users.query.get(match.user_id_1))
+        
+        return matched_users
+        #return matchesAsUser1 + matchesAsUser2 
+        return None
 
     # @staticmethod
     # def add_swipe_right(swiper_id, swipee_id):
