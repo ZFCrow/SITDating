@@ -13,31 +13,18 @@
         <p class="inter-regular">Swipe right to match, Swipe left to go to next one</p>
         <div class="tinder">
             <div class="tinder--cards">
-                <div class="tinder--card">
+
+                {% for user in users %}
+                <div class="tinder--card" data-user-id="{{ user.id }}">
                     <img src="https://via.placeholder.com/400x300">
-                    <h4 class="inter-medium">Name</h4>
-                    <p class="inter-regular">Description</p>
+                    <h4 class="inter-medium">{{ user.name }}</h4>
+                    <p class="card-text inter-regular">
+                        <strong>Gender:</strong> {{ user.gender }}<br>
+                        <strong>Interests:</strong> {{ user.interests }}
+                    </p>
                 </div>
-                <div class="tinder--card">
-                    <img src="https://via.placeholder.com/400x300">
-                    <h4 class="inter-medium">Name</h4>
-                    <p class="inter-regular">Description</p>
-                </div>
-                <div class="tinder--card">
-                    <img src="https://via.placeholder.com/400x300">
-                    <h4 class="inter-medium">Name</h4>
-                    <p class="inter-regular">Description</p>
-                </div>
-                <div class="tinder--card">
-                    <img src="https://via.placeholder.com/400x300">
-                    <h4 class="inter-medium">Name</h4>
-                    <p class="inter-regular">Description</p>
-                </div>
-                <div class="tinder--card">
-                    <img src="https://via.placeholder.com/400x300">
-                    <h4 class="inter-medium">Name</h4>
-                    <p class="inter-regular">Description</p>
-                </div>
+                {% endfor %}
+
             </div>
 
             <div class="tinder--buttons">
@@ -49,6 +36,8 @@
                     </span></button>
             </div>
         </div>
+
+
         <ul>
             {% for user in users %}
             <li><a class="inter-regular" href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
@@ -127,14 +116,36 @@
                     event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 
                     if (event.deltaX > 0) {
-                        alert("Matched")
+                        handleSwipe(event.target, true);
                     } else {
-                        alert("Next")
+                        handleSwipe(event.target, false);
                     }
                     initCards();
                 }
             });
         });
+
+        function handleSwipe(card, liked) {
+            var userId = card.getAttribute('data-user-id');
+            console.log("User ID:", userId, "Liked:", liked);
+
+            if (liked) {
+                fetch('/swipe-right', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                     
+                    },
+                    body: JSON.stringify({ user_id: userId })
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Swiped right successfully');
+                    } else {
+                        console.error('Error swiping right');
+                    }
+                });
+            }
+        }
 
         function createButtonListener(love) {
             return function (event) {

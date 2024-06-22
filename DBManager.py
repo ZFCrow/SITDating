@@ -1,4 +1,4 @@
-from Models import Users, db, Matches 
+from Models import Users, db, Matches, SwipeRight 
 
 class DBManager:
 
@@ -45,8 +45,45 @@ class DBManager:
             matched_users.append(Users.query.get(match.user_id_1))
         
         return matched_users
-        #return matchesAsUser1 + matchesAsUser2 
-        return None
+
+    @staticmethod
+    def deleteSwipeRight(swiper_id, swipee_id): 
+        swipe = SwipeRight.query.filter_by(swiper_id=swiper_id, swipee_id=swipee_id).first()
+        db.session.delete(swipe)
+        db.session.commit()
+
+    @staticmethod
+    def add_swipe_right(swiper_id, swipee_id):
+        # swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
+        # db.session.add(swipe)
+        # db.session.commit()
+        # return swipe
+        reciprocal_swipe = SwipeRight.query.filter_by(swiper_id=swipee_id, swipee_id=swiper_id).first()
+        if reciprocal_swipe:
+            print ("reciprocal swipe found")
+            #delete the reciprocal swipe 
+            db.session.delete(reciprocal_swipe)
+            #add both id to matches table 
+            match = Matches(user_id_1=swiper_id, user_id_2=swipee_id) 
+            db.session.add(match)
+            db.session.commit() 
+            return match 
+        else:
+            swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
+            db.session.add(swipe)
+            db.session.commit()
+            return swipe 
+    
+
+
+
+
+    def add_match(user_id_1, user_id_2):
+        match = Matches(user_id_1=user_id_1, user_id_2=user_id_2)
+        db.session.add(match)
+        db.session.commit()
+        return match 
+    
 
     # @staticmethod
     # def add_swipe_right(swiper_id, swipee_id):
