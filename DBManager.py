@@ -1,4 +1,4 @@
-from models import db, User, Preference, SwipeRight
+from Models import Users, db
 
 class DBManager:
 
@@ -11,29 +11,29 @@ class DBManager:
 
     @staticmethod
     def get_user_by_id(user_id):
-        return User.query.get(user_id)
+        return Users.query.get(user_id)
 
     @staticmethod
     def get_all_users():
-        return User.query.all()
+        return Users.query.all()
 
-    @staticmethod
-    def add_swipe_right(swiper_id, swipee_id):
-        swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
-        db.session.add(swipe)
-        db.session.commit()
-        return swipe
+    # @staticmethod
+    # def add_swipe_right(swiper_id, swipee_id):
+    #     swipe = SwipeRight(swiper_id=swiper_id, swipee_id=swipee_id)
+    #     db.session.add(swipe)
+    #     db.session.commit()
+    #     return swipe
 
-    @staticmethod
-    def find_mutual_matches(user_id):
-        matches = db.session.query(SwipeRight).filter_by(swiper_id=user_id).all()
-        match_ids = [match.swipee_id for match in matches]
+    # @staticmethod
+    # def find_mutual_matches(user_id):
+    #     matches = db.session.query(SwipeRight).filter_by(swiper_id=user_id).all()
+    #     match_ids = [match.swipee_id for match in matches]
 
-        mutual_matches = db.session.query(User).join(
-            SwipeRight, User.id == SwipeRight.swiper_id
-        ).filter(
-            SwipeRight.swipee_id == user_id,
-            User.id.in_(match_ids)
-        ).all()
+    #     mutual_matches = db.session.query(User).join(
+    #         SwipeRight, User.id == SwipeRight.swiper_id
+    #     ).filter(
+    #         SwipeRight.swipee_id == user_id,
+    #         User.id.in_(match_ids)
+    #     ).all()
 
-        return mutual_matches
+    #     return mutual_matches

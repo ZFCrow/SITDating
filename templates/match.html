@@ -1,15 +1,1 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
-
-{% block content %}
-    <h2>Find Matches</h2>
-    <p>Here are your matches:</p>
-    <ul>
-        {% for user in users %}
-            <li><a href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
-        {% endfor %}
-    </ul>
-{% endblock %}
-=======
-{% extends "base.html" %}
->>>>>>> 7d51758b7e92e17838559ffe038aec2907354e4c
