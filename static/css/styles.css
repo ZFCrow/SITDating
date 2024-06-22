@@ -44,14 +44,13 @@
 
 /* Show it is fixed to the top */
 body {
-    min-height: 75rem;
     padding-top: 4.5rem;
 }
 
 .container {
-    width: auto;
-    max-width: 680px;
-    padding: 0 15px;
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
 }
 
 .navbar-header{
@@ -206,4 +205,8 @@ body {
 
 .fa-remove {
   color: #CDD6DD;
+}
+
+#picture{
+  height: 70%;
 }
