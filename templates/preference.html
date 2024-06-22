@@ -7,10 +7,11 @@
             <h2 class="inter-semibold">Preference</h2>
             <a href="{{ url_for('login') }}" class="btn btn-link">Skip</a>
         </div>
-        <form>
+
+        <form method="POST" action="{{ url_for('preference') }}">
             <div class="form-group">
                 <label for="gender" class="inter-regular">Gender:</label>
-                <select class="form-select inter-regular" id="gender" required>
+                <select name = "gender" class="form-select inter-regular" id="gender" required>
                     <option value="">Choose...</option>
                     <option>Female</option>
                     <option>Male</option>
@@ -19,20 +20,41 @@
             </div>
 
             <div class="form-group">
-                <label for="age" class="inter-regular">Age:</label>
-                <input type="text" class="form-control inter-regular" id="age" placeholder="" required>
+                <label for="min_age" class="inter-regular">Minimum Age:</label>
+                <input type="range" class="form-control-range inter-regular" id="min_age" name="min_age" min="18" max="100" value="18" required>
+                <span id="minAgeValue" class="inter-regular">18</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="max_age" class="inter-regular">Maximum Age:</label>
+                <input type="range" class="form-control-range inter-regular" id="max_age" name="max_age" min="18" max="100" value="100" required>
+                <span id="maxAgeValue" class="inter-regular">100</span>
             </div>
 
             <div class="form-group">
                 <label for="interests" class="inter-regular">Interests:</label>
-                <input type="text" class="form-control inter-regular" id="interests"
-                    placeholder="Separate each interest with a comma" required>
+                <input type="text" class="form-control inter-regular" id="interests" name="interests"
+                    placeholder="Separate each interest with a comma" required> 
             </div>
 
-            <a class="w-100 btn btn-lg btn-primary inter-regular" type="submit" href="{{ url_for('login') }}">Save
-                preferences</a>
+            <button class="w-100 btn btn-lg btn-primary inter-regular" type="submit">Save preferences</button>
         </form>
     </div>
+    <script>
+    const minAgeInput = document.getElementById('min_age');
+    const maxAgeInput = document.getElementById('max_age');
+    const minAgeValue = document.getElementById('minAgeValue');
+    const maxAgeValue = document.getElementById('maxAgeValue');
+
+    minAgeInput.addEventListener('input', function() {
+        minAgeValue.textContent = minAgeInput.value;
+    });
+
+    maxAgeInput.addEventListener('input', function() {
+        maxAgeValue.textContent = maxAgeInput.value;
+    });
+
+    </script>
 </main>
 
 
