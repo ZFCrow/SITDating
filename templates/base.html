@@ -35,6 +35,10 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    {% block navbar %}
+    {% include 'includes/_navbar.html' %}
+    {% endblock %}
+
     <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

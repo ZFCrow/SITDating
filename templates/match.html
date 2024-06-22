@@ -2,9 +2,6 @@
 
 {% block body %}
 
-{% block navbar %}
-{% include 'includes/_navbar.html' %}
-{% endblock %}
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
         {% if session['user_id'] %}
@@ -72,9 +69,12 @@
             {% endfor %}
         </ul> -->
         {% else %}
-        <h2 class="inter-semibold">Welcome to the School Dating App</h2>
-        <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
-                href="{{ url_for('register') }}">register</a> to view profiles.</p>
+        <div class="text-center">
+            <h1 class="salsa-regular">Welcome to the School Dating App</h1>
+            <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
+                    href="{{ url_for('register') }}">register</a> to view profiles.</p>
+            <img src="../static/images/picture.png" id="picture" alt="Two people">
+        </div>
         {% endif %}
     </div>
 </main>

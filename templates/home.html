@@ -2,10 +2,6 @@
 
 {% block body %}
 
-{% block navbar %}
-{% include 'includes/_navbar.html' %}
-{% endblock %}
-
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
         {% if session['user_id'] %}
@@ -50,9 +46,6 @@
                     href="{{ url_for('register') }}">register</a> to view profiles.</p>
             <img src="../static/images/picture.png" id="picture" alt="Two people">
         </div>
-
-
-
         {% endif %}
     </div>
 

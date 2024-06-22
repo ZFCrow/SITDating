@@ -7,7 +7,6 @@ from flask import (
     jsonify,
     flash,
     session,
-    
 )
 from sshtunnel import SSHTunnelForwarder
 from Models import db, SwipeRight, Matches
@@ -58,11 +57,13 @@ dbmanager = DBManager()
 @app.route("/")
 def home():
     username = None
-    if 'user_id' in session:
-        user = dbmanager.get_user_by_id(session['user_id'])
+    if "user_id" in session:
+        user = dbmanager.get_user_by_id(session["user_id"])
         if user:
             username = user.username
-    return render_template('home.html', users=dbmanager.get_all_users(), username=username)
+    return render_template(
+        "home.html", users=dbmanager.get_all_users(), username=username
+    )
 
 
 @app.route("/users")
@@ -89,32 +90,40 @@ def profile(user_id):
 
 @app.route("/match")
 def match():
-    #retrieve the user id from the session 
-    user_id = session['user_id'] 
-    matches = dbmanager.get_matches(user_id) 
-    for match in matches:
-        print(match.username)
-        print (match.age) 
-    return render_template("match.html", matches = matches)
+    # retrieve the user id from the session
+    username = None
+    matches = []
+
+    if "user_id" in session:
+        user = dbmanager.get_user_by_id(session["user_id"])
+        user_id = session["user_id"]
+        if user:
+            username = user.username
+            matches = dbmanager.get_matches(user_id)
+            for match in matches:
+                print(match.username)
+                print(match.age)
+
+    return render_template("match.html", matches=matches, username=username)
+
 
 @app.route("/swipe-right", methods=["POST"])
 def swipe_right():
     data = request.get_json()
-    userID = session['user_id']
-    swipeeID = data['user_id'] 
-    print (userID, swipeeID)
+    userID = session["user_id"]
+    swipeeID = data["user_id"]
+    print(userID, swipeeID)
 
     response = dbmanager.add_swipe_right(userID, swipeeID)
 
-    #check if its a match or a swipe right 
+    # check if its a match or a swipe right
     if isinstance(response, Matches):
-        print ("Match")
+        print("Match")
         return jsonify({"status": "match"}), 200
     elif isinstance(response, SwipeRight):
-        print ("Swipe Right") 
+        print("Swipe Right")
         return jsonify({"status": "swipe right"}), 200
-        
-    
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -167,7 +176,6 @@ def login():
 @app.route("/preference")
 def preference():
     return render_template("preference.html")
-
 
 
 @app.route("/logout")
