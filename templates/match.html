@@ -10,17 +10,18 @@
         <div class="album py-5 bg-light">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    {% for user in matches %}
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            {% if user.gender == 'Female' %}
-                            {% set image_number = loop.index % 5 + 1 %}
-                            <img src="{{ url_for('static', filename='images/female/' ~ image_number ~ '.jpg') }}" class="card-img-top" alt="...">
-                            {% else %}
-                            {% set image_number = loop.index % 5 + 1 %}
-                            <img src="{{ url_for('static', filename='images/male/' ~ image_number ~ '.jpg') }}" class="card-img-top" alt="...">
-                            {% endif %}
+                {% for user in matches %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        {% if user.gender == 'Female' %}
+                        {% set image_number = loop.index % 5 + 1 %}
+                        <img src="{{ url_for('static', filename='images/female/' ~ image_number ~ '.jpg') }}"
+                            class="card-img-top" alt="...">
+                        {% else %}
+                        {% set image_number = loop.index % 5 + 1 %}
+                        <img src="{{ url_for('static', filename='images/male/' ~ image_number ~ '.jpg') }}"
+                            class="card-img-top" alt="...">
+                        {% endif %}
 
                         <div class="card-body">
                             <h5 class="inter-medium">{{ user.name }}</h5>
@@ -33,23 +34,25 @@
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
-        </div>
 
-        <!-- <ul>
+
+        </div>
+    </div>
+
+    <!-- <ul>
             {% for user in users %}
             <li><a class="inter-regular" href="{{ url_for('profile', user_id=user.id) }}">{{ user.name }}</a></li>
             {% endfor %}
         </ul> -->
-        {% else %}
-        <div class="text-center">
-            <h1 class="salsa-regular">Welcome to the School Dating App</h1>
-            <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
-                    href="{{ url_for('register') }}">register</a> to view profiles.</p>
-            <img src="../static/images/picture.png" id="picture" alt="Two people">
-        </div>
-        {% endif %}
+    {% else %}
+    <div class="text-center">
+        <h1 class="salsa-regular">Welcome to the School Dating App</h1>
+        <p class="inter-regular">Please <a href="{{ url_for('login') }}">login</a> or <a
+                href="{{ url_for('register') }}">register</a> to view profiles.</p>
+        <img src="../static/images/picture.png" id="picture" alt="Two people">
+    </div>
+    {% endif %}
     </div>
 </main>
 
