@@ -1,50 +1,46 @@
-/*Font*/
+/* Font */
 .inter-bold {
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-variation-settings:
-      "slnt" 0;
-  }
-  
-  .inter-semibold {
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 600;
-    font-style: normal;
-    font-variation-settings:
-      "slnt" 0;
-  }
-  
-  .inter-medium {
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-    font-variation-settings:
-      "slnt" 0;
-  }
-  
-  .inter-regular {
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-variation-settings:
-      "slnt" 0;
-  }
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
 
-  .salsa-regular {
-    font-family: "Salsa", cursive;
-    font-weight: 400;
-    font-style: normal;
-  }
-  /*End of font*/
+.inter-semibold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.inter-medium {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.inter-regular {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.salsa-regular {
+  font-family: "Salsa", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+/* End of font */
 
 /* Show it is fixed to the top */
 body {
-    padding-top: 4.5rem;
+  padding-top: 4.5rem;
 }
 
 .container {
@@ -53,11 +49,11 @@ body {
   padding: 0 15px;
 }
 
-.navbar-header{
-    font-size: x-large;
+.navbar-header {
+  font-size: x-large;
 }
 
-/*login*/
+/* Login */
 .form-signin {
   width: 100%;
   max-width: 700px;
@@ -84,18 +80,19 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-/*end of login*/
+/* End of login */
 
-/*register*/
-.form-group{
+/* Register */
+.form-group {
   margin-top: 10px;
 }
 
-.btn-primary{
+.btn-primary {
   margin-top: 20px;
 }
+/* End of register */
 
-/*Card*/
+/* Card */
 .tinder {
   height: 100vh;
   overflow: hidden;
@@ -156,6 +153,9 @@ body {
 
 .tinder--card img {
   max-width: 100%;
+  max-height: 60%; /* Adjust as needed */
+  object-fit: cover;
+  border-radius: 10px;
   pointer-events: none;
 }
 
@@ -207,7 +207,7 @@ body {
   color: #CDD6DD;
 }
 
-#picture{
+#picture {
   height: 70%;
 }
 
