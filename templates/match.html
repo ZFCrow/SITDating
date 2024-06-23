@@ -9,10 +9,18 @@
         <p class="inter-regular">Here are your matches:</p>
         <div class="album py-5 bg-light">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                {% for user in matches %}
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <img src="https://via.placeholder.com/400x300">
+
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for user in matches %}
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            {% if user.gender == 'Female' %}
+                            {% set image_number = loop.index % 5 + 1 %}
+                            <img src="{{ url_for('static', filename='images/female/' ~ image_number ~ '.jpg') }}" class="card-img-top" alt="...">
+                            {% else %}
+                            {% set image_number = loop.index % 5 + 1 %}
+                            <img src="{{ url_for('static', filename='images/male/' ~ image_number ~ '.jpg') }}" class="card-img-top" alt="...">
+                            {% endif %}
 
                         <div class="card-body">
                             <h5 class="inter-medium">{{ user.name }}</h5>

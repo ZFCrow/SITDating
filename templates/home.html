@@ -12,7 +12,14 @@
 
                 {% for user in users %}
                 <div class="tinder--card" data-user-id="{{ user.id }}">
-                    <img src="https://via.placeholder.com/400x300">
+                    {% if user.gender == "Female" %}
+                    {% set image_number = loop.index % 5 + 1 %}
+                        <img src="{{ url_for('static', filename='images/female/' ~ image_number ~ '.jpg') }}">
+                    {% else %}
+                    {% set image_number = loop.index % 5 + 1 %}
+                        <img src="{{ url_for('static', filename='images/male/' ~ image_number ~ '.jpg') }}">
+                    {% endif %}
+
                     <h4 class="inter-medium">{{ user.name }}</h4>
                     <p class="card-text inter-regular">
                         <strong>Gender:</strong> {{ user.gender }}<br>

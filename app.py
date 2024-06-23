@@ -60,23 +60,37 @@ dbmanager = DBManager()
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-@app.route("/")
+
 @app.route("/")
 def home():
     username = None
-    filteredUsers = []
+    filteredUsers = [] 
     if "user_id" in session:
         user = dbmanager.get_user_by_id(session["user_id"])
         if user:
             username = user.username
-        users = dbmanager.get_all_users_except(
-            session["user_id"]
-        )  # Get all users except the current user
-    else:
-        # Handle case where user is not logged in
-        flash("Please login to access this page", "danger")
-        return redirect(url_for("login"))
-    return render_template("home.html", users=users, username=username)
+        #go to user preference table, get the user preferences and filter the users based on the preferences 
+        #get the user preferences 
+        preferences = dbmanager.get_user_preferences(session["user_id"])
+        if not preferences:
+            flash("Please set your preferences", "danger")
+            return redirect(url_for("preference"))
+        preFerredGender = preferences.preferred_gender
+        preferredAgeMin = preferences.preferred_age_min
+        preferredAgeMax = preferences.preferred_age_max
+        preferredInterests = preferences.interests.split(",") if preferences.interests else []
+        print (f"PreferredGender: {preFerredGender}, PreferredAgeMin: {preferredAgeMin}, PreferredAgeMax: {preferredAgeMax}, PreferredInterests: {preferredInterests}")
+        users = dbmanager.get_all_users()
+        
+        #filter the users based on the preferences
+        filteredUsers = [
+            user for user in users
+            if (user.gender == preFerredGender or preFerredGender == "Any") and
+            (user.age >= preferredAgeMin and user.age <= preferredAgeMax)
+        ]
+        print(filteredUsers)
+
+    return render_template("home.html", users=filteredUsers, username=username)
 
 
 @app.route("/users")
