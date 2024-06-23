@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block body %}
-
 <main class="flex-shrink-0">
     <div class="bg-light p-5 rounded">
         {% if session['user_id'] %}
@@ -14,10 +13,10 @@
                 <div class="tinder--card" data-user-id="{{ user.id }}">
                     {% if user.gender == "Female" %}
                     {% set image_number = loop.index % 5 + 1 %}
-                        <img src="{{ url_for('static', filename='images/female/' ~ image_number ~ '.jpg') }}">
+                    <img src="{{ url_for('static', filename='images/female/' ~ image_number ~ '.jpg') }}">
                     {% else %}
                     {% set image_number = loop.index % 5 + 1 %}
-                        <img src="{{ url_for('static', filename='images/male/' ~ image_number ~ '.jpg') }}">
+                    <img src="{{ url_for('static', filename='images/male/' ~ image_number ~ '.jpg') }}">
                     {% endif %}
 
                     <h4 class="inter-medium">{{ user.name }}</h4>
@@ -39,8 +38,6 @@
                     </i></button>
             </div>
         </div>
-
-
         {% else %}
         <div class="text-center">
             <h1 class="salsa-regular">Welcome to the School Dating App</h1>
